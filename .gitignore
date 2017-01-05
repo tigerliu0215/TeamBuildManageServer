@@ -1,0 +1,27 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# General
+# =======
+*.log
+
+# IDEA
+# =======
+.idea
+*.iml
+
+# Node
+# =======
+node_modules
+
+# Public Bower Lib
+# =======
+public/lib
+
+# MEAN.js app and assets
+# ======================
+public/dist/
+uploads
+modules/users/client/img/profile/uploads
+config/env/local.js
+config/env/local-*.js
+
