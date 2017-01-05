@@ -156,39 +156,6 @@ gulp.task('wiredep', function () {
     .pipe(gulp.dest('config/assets/'));
 });
 
-// wiredep task to production
-gulp.task('wiredep:prod', function () {
-  return gulp.src('config/assets/production.js')
-    .pipe(wiredep({
-      ignorePath: '../../',
-      fileTypes: {
-        js: {
-          replace: {
-            css: function (filePath) {
-              var minFilePath = filePath.replace('.css', '.min.css');
-              var fullPath = path.join(process.cwd(), minFilePath);
-              if (!fs.existsSync(fullPath)) {
-                return '\'' + filePath + '\',';
-              } else {
-                return '\'' + minFilePath + '\',';
-              }
-            },
-            js: function (filePath) {
-              var minFilePath = filePath.replace('.js', '.min.js');
-              var fullPath = path.join(process.cwd(), minFilePath);
-              if (!fs.existsSync(fullPath)) {
-                return '\'' + filePath + '\',';
-              } else {
-                return '\'' + minFilePath + '\',';
-              }
-            }
-          }
-        }
-      }
-    }))
-    .pipe(gulp.dest('config/assets/'));
-});
-
 // Copy local development environment config example
 gulp.task('copyLocalEnvConfig', function () {
   var src = [];
@@ -356,7 +323,7 @@ gulp.task('protractor', ['webdriver_update'], function () {
 
 // Lint project files and minify them into two production files.
 gulp.task('build', function (done) {
-  runSequence('env:dev', 'wiredep:prod', ['uglify', 'cssmin'], done);
+  runSequence('env:dev', ['uglify', 'cssmin'], done);
 });
 
 // Run the project tests
