@@ -36,7 +36,6 @@ module.exports.initLocalVariables = function (app) {
   app.locals.jsFiles = config.files.client.js;
   app.locals.cssFiles = config.files.client.css;
   app.locals.livereload = config.livereload;
-  app.locals.logo = config.logo;
   app.locals.favicon = config.favicon;
   app.locals.env = process.env.NODE_ENV;
   app.locals.domain = config.domain;
