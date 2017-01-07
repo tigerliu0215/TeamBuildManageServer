@@ -1,5 +1,5 @@
 /** Created by CUIJA on 01-06-2017.*/
-(function(){
+(function () {
   'use strict';
 
   angular
@@ -8,13 +8,20 @@
 
   routeConfig.$inject = ['$stateProvider'];
 
-  function routeConfig($stateProvider){
+  function routeConfig($stateProvider) {
     $stateProvider
-      .state('activities',{
-      abstract:true,
-      url:'/activities',
-      template:'<ui-view></ui-view>'
-    })
+      .state('activities', {
+        abstract: true,
+        url: '/activities',
+        template: '<ui-view></ui-view>'
+      })
+      .state('activities.list', {
+        url:'',
+        templateUrl:'/modules/activities/client/views/list-activities.client.view.html',
+        data:{
+          pageTitle:'Activities'
+        }
+      })
   }
 
 })();
