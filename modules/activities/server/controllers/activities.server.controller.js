@@ -60,7 +60,7 @@ function create(req, res) {
   var activity = new Activity(req.body);
   activity.createdBy = req.user;
   activity.updated = Date.now();
-  activity.updatedBy = user;
+  activity.updatedBy = req.user;
 
   activity.save(function (error) {
     if (error) {
@@ -88,7 +88,7 @@ function update(req, res) {
 
   var user = req.user;
   activity.updated = Date.now();
-  activity.updatedBy = user;
+  activity.updatedBy = req.user;
 
   activity.save(function(error){
     if(error){
