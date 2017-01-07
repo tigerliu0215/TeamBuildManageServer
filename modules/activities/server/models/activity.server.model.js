@@ -4,17 +4,26 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var VotingSchema = require('./voting.server.model');
+var AttachmentSchema = require('./activity-attchment.server.model');
+
 var ActivitySchema = new Schema({
-  title:{
+  title: {
     type: String,
     default: '',
     trim: true,
     required: 'Title cannot be blank'
   },
-  htmlContent:{
+  htmlContent: {
     type: String,
     default: '',
     trim: true
+  },
+  attachments: {
+    type: [AttachmentSchema]
+  },
+  votings: {
+    type: [VotingSchema]
   },
   created: {
     type: Date,
@@ -34,4 +43,4 @@ var ActivitySchema = new Schema({
 });
 
 
-mongoose.model('Activity',ActivitySchema);
+mongoose.model('Activity', ActivitySchema);

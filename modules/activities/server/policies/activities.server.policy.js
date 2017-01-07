@@ -12,7 +12,20 @@ module.exports.isAllowed = isAllowed;
 function invokeRolesPolicies() {
   acl.allow([
     {
-      roles: ['user'],
+      roles:['admin'],
+      allows:[
+        {
+          resources: '/api/activities',
+          permissions: ['*']
+        },
+        {
+          resources: '/api/activities/:activityId',
+          permissions: ['*']
+        }
+      ]
+    },
+    {
+      roles: ['user','guest'],
       allows: [
         {
           resources: '/api/activities',
@@ -39,7 +52,7 @@ function isAllowed(req, res, next) {
         return next();
       }
       else{
-        return res.status(403).join({
+        return res.status(403).json({
           message:'User is not authorized'
         });
       }

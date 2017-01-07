@@ -14,7 +14,11 @@ var OptionSchema = new Schema({
     //who vote this option?
     //when vote?
     type:[{
-      votedBy: {
+      created:{
+        type: Date,
+        default: Date.now
+      },
+      createdBy: {
         type: Schema.ObjectId,
         ref: 'User'
       }
