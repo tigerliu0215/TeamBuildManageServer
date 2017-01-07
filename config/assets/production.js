@@ -10,7 +10,7 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.min.css',
         'public/lib/bootswatch-dist/css/bootstrap.min.css',
         'public/lib/font-awesome/css/font-awesome.min.css',
-        'public/lib/textAngular/dist/textAngular.min.css'
+        'public/lib/textAngular/dist/textAngular.css'
         // endbower
       ],
       js: [
