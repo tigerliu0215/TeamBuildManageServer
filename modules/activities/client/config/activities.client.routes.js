@@ -18,10 +18,35 @@
       .state('activities.list', {
         url:'',
         templateUrl:'/modules/activities/client/views/list-activities.client.view.html',
+        controller:'ActivitiesListController',
+        controllerAs:'vm',
         data:{
           pageTitle:'Activities'
         }
       })
+      .state('activities.view',{
+        url:'/:activityId',
+        templateUrl:'/modules/activities/client/views/view-activity.client.view.html',
+        controller:'ActivitiesViewController',
+        controllerAs:'vm',
+        resolve:{
+          activitiesService : getActivity
+        },
+        data:{
+          pageTitle:'Activity : '
+        }
+      })
   }
+
+  getActivity.$inject = ['$stateParams', 'ActivitiesService'];
+
+  function getActivity($stateParams, ActivitiesService) {
+    var activityId = $stateParams.activityId;
+    return ActivitiesService.get({
+      activityId: activityId
+    }).$promise;
+
+  }
+
 
 })();

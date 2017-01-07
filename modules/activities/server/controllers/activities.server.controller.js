@@ -20,6 +20,7 @@ function listActivities(req, res) {
     .find()
     .sort('-created')
     .populate('createdBy', 'displayName')
+    .populate('updatedBy', 'displayName')
     .exec(function (error, activities) {
       if (error) {
         return res.status(422).send({
@@ -41,6 +42,7 @@ function findById(req, res, next, activityId) {
   Activity
     .findById(activityId)
     .populate('createdBy', 'displayName')
+    .populate('updatedBy', 'displayName')
     .exec(function (error, activity) {
       if (error) {
         return next(err);

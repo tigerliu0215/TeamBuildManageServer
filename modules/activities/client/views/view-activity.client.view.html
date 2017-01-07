@@ -1,0 +1,18 @@
+<section>
+  <div class="page-header">
+    <h2>{{::vm.activity.title}}</h2>
+    <small class="list-group-item-text">
+      Last Updated
+      <span data-ng-bind="vm.activity.updated | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.activity.updatedBy" ng-bind="vm.activity.updatedBy.displayName"></span>
+      <span ng-if="!vm.activity.updatedBy">Deleted User</span>
+    </small>
+  </div>
+
+  <div class="col-md-12">
+    <div ng-bind-html="vm.activity.htmlContent" >
+
+    </div>
+  </div>
+</section>
