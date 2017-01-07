@@ -53,6 +53,15 @@ module.exports = {
           fileSize: 1024 * 1024 // Max file size in bytes (1 MB)
         }
       }
+    },
+    attachments: {
+      image: {
+        dest: './modules/activities/client/images/uploads/',
+        limits: {
+          fileSize: 8 * 1024 * 1024 // 8MB
+        }
+      },
+      file: {}
     }
   },
   shared: {

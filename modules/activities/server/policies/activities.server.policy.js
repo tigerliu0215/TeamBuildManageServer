@@ -12,8 +12,8 @@ module.exports.isAllowed = isAllowed;
 function invokeRolesPolicies() {
   acl.allow([
     {
-      roles:['admin'],
-      allows:[
+      roles: ['admin'],
+      allows: [
         {
           resources: '/api/activities',
           permissions: ['*']
@@ -21,11 +21,15 @@ function invokeRolesPolicies() {
         {
           resources: '/api/activities/:activityId',
           permissions: ['*']
+        },
+        {
+          resources: '/api/attachments/upload',
+          permissions: ['*']
         }
       ]
     },
     {
-      roles: ['user','guest'],
+      roles: ['user', 'guest'],
       allows: [
         {
           resources: '/api/activities',
@@ -43,17 +47,17 @@ function invokeRolesPolicies() {
 function isAllowed(req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
-  acl.areAnyRolesAllowed(roles,req.route.path,req.method.toLocaleLowerCase(),function(error,isAllowed){
-    if(error){
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLocaleLowerCase(), function (error, isAllowed) {
+    if (error) {
       return res.status(500).send('Unexpected authorization error');
     }
-    else{
-      if(isAllowed){
+    else {
+      if (isAllowed) {
         return next();
       }
-      else{
+      else {
         return res.status(403).json({
-          message:'User is not authorized'
+          message: 'User is not authorized'
         });
       }
     }

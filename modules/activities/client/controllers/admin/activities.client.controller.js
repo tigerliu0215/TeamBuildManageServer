@@ -5,12 +5,26 @@
 
   angular
     .module('activities.admin')
-    .controller('ActivitiesAdminController', ActivitiesAdminController);
+    .controller('ActivitiesAdminController', ActivitiesAdminController)
+    .config(customEditorConfig)
+  ;
 
-  ActivitiesAdminController.$inject = ['$scope', '$state', '$log', '$window', 'activitiesService', 'Authentication', 'Notification'];
+  ActivitiesAdminController.$inject = ['$scope', '$state', '$log', '$window',  'activitiesService', 'Authentication', 'Notification'];
 
   function ActivitiesAdminController($scope, $state, $log, $window, activity, Authentication, Notification) {
     var vm = this;
+
+    vm.editorToolbarOptions = [
+      [
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'html'
+      ],
+      [
+        'quote', 'bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'undo', 'redo', 'clear'
+      ],
+      [
+        'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'uploadImage', 'insertLink'
+      ]
+    ];
 
     vm.activity = activity;
     vm.authentication = Authentication;
@@ -51,4 +65,41 @@
 
 
   }
+
+  customEditorConfig.$inject = ['$provide'];
+
+  function customEditorConfig($provide) {
+    $provide.decorator('taOptions', ['taRegisterTool', '$delegate','$log','$uibModal', function (taRegisterTool, taOptions,$log,$uibModal) {
+      taRegisterTool('uploadImage', {
+        iconclass: "glyphicon glyphicon-picture",
+        action: function () {
+          //when open image upload callback insert the image link
+          //and add item to vm.activity.attachments.
+          var self = this;
+          var uploadImageModalInstance = $uibModal.open({
+            templateUrl:'/modules/activities/client/views/admin/attachment.upload.client.view.html',
+            controller:'AttachmentsController',
+            controllerAs:'vm'
+          });
+
+          uploadImageModalInstance.result.then(
+            function closeCallback(uploadResponse){
+              $log.info('uploadResponse:',uploadResponse);
+              var imgLink = '<img src="/'+uploadResponse.attachmentUrl+'">';
+              self.$editor().wrapSelection('inserthtml', imgLink);
+
+            },
+            function dismissCallback(){
+
+            }
+          );
+
+
+        }
+      });
+      return taOptions;
+    }]);
+  }
+
+
 })();

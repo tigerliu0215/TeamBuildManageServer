@@ -5,7 +5,8 @@
   // Configuring the Articles Admin module
   angular
     .module('activities.admin')
-    .run(menuConfig);
+    .run(menuConfig)
+  ;
 
   menuConfig.$inject = ['menuService'];
 

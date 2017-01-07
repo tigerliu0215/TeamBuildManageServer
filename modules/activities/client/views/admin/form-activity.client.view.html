@@ -24,7 +24,9 @@
           <!--<textarea name="content" data-ng-model="vm.activity.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content"></textarea>-->
 
           <text-angular-toolbar
-            name="ta-toolbar"></text-angular-toolbar>
+            ta-toolbar="vm.editorToolbarOptions"
+            name="ta-toolbar">
+          </text-angular-toolbar>
           <text-angular
             name="htmlContent"
             ta-target-toolbars="ta-toolbar"
