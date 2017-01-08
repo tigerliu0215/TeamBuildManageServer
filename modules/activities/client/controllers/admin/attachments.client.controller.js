@@ -39,7 +39,7 @@
     // Called after the user has successfully uploaded a new picture
     function onSuccessItem(data) {
       // Show success message
-      Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Successfully changed profile picture'});
+      Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Successfully upload picture'});
 
       $log.info('ready to close attachment uibModal');
       $uibModalInstance.close(data);
@@ -57,7 +57,7 @@
       // Show error message
       Notification.error({
         message: response.message,
-        title: '<i class="glyphicon glyphicon-remove"></i> Failed to change profile picture'
+        title: '<i class="glyphicon glyphicon-remove"></i> Failed to upload picture'
       });
     }
   }

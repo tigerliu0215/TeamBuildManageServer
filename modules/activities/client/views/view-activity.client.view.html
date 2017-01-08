@@ -17,9 +17,9 @@
   </div>
 
   <!-- Comments Area -->
-  <div class="col-md-12">
+  <div class="col-md-12" ng-if="vm.authentication.user" >
     <div class="panel panel-default">
-      <div class="panel-heading">Comments</div>
+      <div class="panel-heading" >Comments</div>
       <!-- Existing Comments-->
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="comment in vm.activity.comments">

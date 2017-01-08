@@ -32,6 +32,11 @@
     vm.form = {};
 
     vm.save = save;
+    vm.del = del;
+    vm.addVoting = addVoting;
+    vm.delVoting = delVoting;
+    vm.addVotingOption = addVotingOption;
+    vm.delVotingOption = delVotingOption;
 
     function save(isValid) {
       if (!isValid) {
@@ -85,6 +90,46 @@
         $log.info('attachmentList:',attachmentList);
         return attachmentList;
       }
+    }
+
+
+
+    function del(){
+      if ($window.confirm('Are you sure you want to delete?')) {
+        vm.activity.$remove(function() {
+          $state.go('admin.activities.list');
+          Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Activity deleted successfully!' });
+        });
+      }
+    }
+
+    function addVoting(){
+      var newVoting = {
+        title:'',
+        selectionType:'single',
+        options:[
+          {
+            sequence:0,
+            description:'Option1'
+          },
+          {
+            sequence:1,
+            description:'Option2'
+          }
+        ]
+      };
+    }
+
+    function addVotingOption(voting){
+
+    }
+
+    function delVotingOption(voting,$index){
+
+    }
+
+    function delVoting(selectedVoting){
+
     }
 
   }

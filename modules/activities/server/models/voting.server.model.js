@@ -19,8 +19,7 @@ var OptionSchema = new Schema({
         default: Date.now
       },
       createdBy: {
-        type: Schema.ObjectId,
-        ref: 'User'
+        type: String
       }
     }]
 
@@ -34,9 +33,18 @@ var VotingSchema = new Schema({
     trim: true,
     required: 'Title cannot be blank'
   },
+  selectionType:{
+    type: String,
+    enum :['single','multi'],//....should considering how design multi select when select it
+    default : 'single',
+    required: true
+  },
   options:{
     type:[OptionSchema]
   },
+
+
+  //TODO:considering about should keep these fields in activities sub-models.
   created: {
     type: Date,
     default: Date.now

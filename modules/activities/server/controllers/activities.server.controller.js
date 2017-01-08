@@ -105,7 +105,17 @@ function update(req, res) {
 }
 
 function del(req, res) {
+  var activity = req.activity;
 
+  activity.remove(function(error){
+    if (error) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(error)
+      });
+    } else {
+      res.json(activity);
+    }
+  });
 }
 
 function publishComment(req, res) {
