@@ -1,20 +1,22 @@
 <section>
-  <div class="page-header">
+  <div class="page-header col-md-12">
     <h1>{{vm.activity._id ? 'Edit Activity' : 'New Activity'}}</h1>
   </div>
 
   <div class="pull-right">
-    <a ng-show="vm.activity._id" class="btn btn-primary" >
+    <a ng-show="vm.activity._id" class="btn btn-primary">
       <i class="glyphicon glyphicon-trash"></i>
     </a>
   </div>
 
   <div class="col-md-12">
-    <form name="vm.form.activityForm" class="form-horizontal" ng-submit="vm.save(vm.form.activityForm.$valid)" novalidate>
+    <form name="vm.form.activityForm" class="form-horizontal col-md-12" ng-submit="vm.save(vm.form.activityForm.$valid)"
+          novalidate>
       <fieldset>
         <div class="form-group" show-errors>
           <label class="control-label" for="title">Title</label>
-          <input name="title" type="text" ng-model="vm.activity.title" id="title" class="form-control" placeholder="Title" required autofocus>
+          <input name="title" type="text" ng-model="vm.activity.title" id="title" class="form-control"
+                 placeholder="Title" required autofocus>
           <div ng-messages="vm.form.activityForm.title.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Activity title is required.</p>
           </div>
@@ -37,12 +39,37 @@
           <button type="submit" class="btn btn-default btn-primary">{{vm.activity._id ? 'Update' : 'Create'}}</button>
         </div>
 
-        <div class="form-group">
-          <pre>
-            {{vm.activity}}
-          </pre>
-        </div>
       </fieldset>
     </form>
+  </div>
+
+
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Comments</div>
+      <!-- Existing Comments-->
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="comment in vm.activity.comments">
+          <span># {{comment.sequence}}</span>
+          <p>
+            {{comment.content}}
+          </p>
+          <small class="list-group-item-text">
+            {{comment.createdBy}} , {{comment.created | date:'medium'}}
+          </small>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <p><strong>JSON Preview:</strong></p>
+    <pre>{{vm.activity  | json}}</pre>
+  </div>
+
+
+  <div class="col-md-12">
+    <p><strong>Attachments Preview:</strong></p>
+    <pre>{{vm.activity.htmlContent | attachmentFilter | json}}</pre>
   </div>
 </section>

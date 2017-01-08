@@ -40,7 +40,8 @@
         return false;
       }
 
-      $log.info('saving activity...');
+      vm.activity = constructActivity(vm.activity);
+      $log.info('saving activity:',vm.activity);
 
       vm.activity.createOrUpdate()
         .then(successCallback)
@@ -63,6 +64,28 @@
       }
     }
 
+
+    function constructActivity(activity){
+      activity.attachments = calAttachments(activity.htmlContent);
+
+      return activity;
+
+
+      function calAttachments(htmlContent){
+        var elem = document.createElement("div");
+        elem.innerHTML = htmlContent;
+        var imgList = elem.getElementsByTagName('img');
+        var attachmentList = [];
+        _.each(imgList,function(imgLink){
+          attachmentList.push({
+            fileType:'image',
+            link:imgLink.src
+          });
+        });
+        $log.info('attachmentList:',attachmentList);
+        return attachmentList;
+      }
+    }
 
   }
 

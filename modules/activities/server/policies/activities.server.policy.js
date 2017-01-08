@@ -29,7 +29,24 @@ function invokeRolesPolicies() {
       ]
     },
     {
-      roles: ['user', 'guest'],
+      roles: ['user'],
+      allows: [
+        {
+          resources: '/api/activities',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/:activityId',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/comments/publish/:activityId',
+          permissions: ['post']
+        }
+      ]
+    },
+    {
+      roles: ['guest'],
       allows: [
         {
           resources: '/api/activities',

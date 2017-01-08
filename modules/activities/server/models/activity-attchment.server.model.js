@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var ActivityAttachmentSchema = new Schema({
   activityId: {
     type: Schema.ObjectId,
-    ref: 'User',
+    ref: 'Activity',
     required: true
   },
   fileType: {
@@ -19,16 +19,6 @@ var ActivityAttachmentSchema = new Schema({
     type: String,
     trim: true,
     required: true
-  },
-
-
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  createdBy: {
-    type: Schema.ObjectId,
-    ref: 'User'
   }
 
 });

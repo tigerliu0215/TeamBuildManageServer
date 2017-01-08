@@ -1,11 +1,12 @@
 /** Created by CUIJA on 01-06-2017.*/
 
-
+var _ = require('lodash');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var VotingSchema = require('./voting.server.model');
 var AttachmentSchema = require('./activity-attchment.server.model');
+var CommentSchema = require('./activity-comment.server.model');
 
 var ActivitySchema = new Schema({
   title: {
@@ -24,6 +25,9 @@ var ActivitySchema = new Schema({
   },
   votings: {
     type: [VotingSchema]
+  },
+  comments: {
+    type: [CommentSchema]
   },
   created: {
     type: Date,

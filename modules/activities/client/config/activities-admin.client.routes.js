@@ -47,7 +47,8 @@
           activitiesService: getActivity
         },
         data: {
-          roles: ['admin']
+          roles: ['admin'],
+          pageTitle: 'Edit Activity : {{activitiesService.title}}'
         }
       })
     ;

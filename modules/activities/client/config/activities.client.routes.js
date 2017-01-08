@@ -33,7 +33,7 @@
           activitiesService : getActivity
         },
         data:{
-          pageTitle:'Activity : '
+          pageTitle:'Activity : {{activitiesService.title}}'
         }
       })
   }

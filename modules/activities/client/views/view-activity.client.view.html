@@ -1,5 +1,5 @@
 <section>
-  <div class="page-header">
+  <div class="page-header col-md-12">
     <h2>{{::vm.activity.title}}</h2>
     <small class="list-group-item-text">
       Last Updated
@@ -13,6 +13,40 @@
   <div class="col-md-12">
     <div ng-bind-html="vm.activity.htmlContent" >
 
+    </div>
+  </div>
+
+  <!-- Comments Area -->
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Comments</div>
+      <!-- Existing Comments-->
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="comment in vm.activity.comments">
+          <span># {{comment.sequence}}</span>
+          <p>
+            {{comment.content}}
+          </p>
+          <small class="list-group-item-text">
+            {{comment.createdBy}} , {{comment.created | date:'medium'}}
+          </small>
+        </li>
+
+      </ul>
+
+      <!-- Input -->
+      <div class="panel-body" ng-if="vm.authentication.user">
+        <form name="vm.form.commentForm" ng-submit="vm.publishComment(vm.form.commentForm.$valid)" novalidate autocomplete="off">
+          <div class="form-group" show-errors="">
+            <label class="control-label" for="content">Your Comment</label>
+            <textarea name="content" data-ng-model="vm.comment.content" id="content" class="form-control" cols="30" rows="3" placeholder="Input Here" required></textarea>
+            <div ng-messages="vm.form.commentForm.content.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Content can not be empty.</p>
+            </div>
+          </div>
+          <button class="btn btn-primary pull-right" type="submit">Publish</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>
