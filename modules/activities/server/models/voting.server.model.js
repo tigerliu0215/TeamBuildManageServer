@@ -43,6 +43,29 @@ var VotingSchema = new Schema({
     type:[OptionSchema]
   },
 
+  //Belows fields are look up for weibo.com twitter.com
+
+  //After the endTime will disable update the voting result
+  endTime:{
+    type:Date
+  },
+  /**
+   * Several types for visibility:
+   * 1.All guest can view,but can not vote      -- all
+   * 2.Only user role can view and vote         -- registered
+   * 3.Only user role can view after they vote  -- voted
+   */
+  visibility:{
+    type:String,
+    enum:[
+      'all',
+      'registered',
+      'voted'
+    ],
+    required:true,
+    default:'all'
+  },
+
 
   //TODO:considering about should keep these fields in activities sub-models.
   created: {

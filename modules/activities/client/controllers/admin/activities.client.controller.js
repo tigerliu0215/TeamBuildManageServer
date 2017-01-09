@@ -110,14 +110,28 @@
         options:[
           {
             sequence:0,
-            description:'Option1'
+            description:'Option1',
+            voteDetails:[]
           },
           {
             sequence:1,
-            description:'Option2'
+            description:'Option2',
+            voteDetails:[]
           }
-        ]
+        ],
+        visibility:'all'
       };
+
+      if(_.isUndefined(vm.activity.votings)){
+        vm.activity.votings = [];
+      }
+
+      vm.activity.votings.push(newVoting);
+
+    }
+
+    function delVoting(selectVotingIndex){
+      vm.activity.votings.splice(selectVotingIndex,1);
     }
 
     function addVotingOption(voting){
@@ -128,9 +142,7 @@
 
     }
 
-    function delVoting(selectedVoting){
 
-    }
 
   }
 
