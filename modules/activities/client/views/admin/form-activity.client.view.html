@@ -74,7 +74,7 @@
                              class="form-control"
                              placeholder="Option Description" required>
                       <span class="input-group-addon ">
-                        <i class="glyphicon-trash glyphicon" ng-click="vm.delVotingOption(voting,votingOption.sequence)"
+                        <i class="glyphicon-trash glyphicon" ng-click="vm.delVotingOption(voting,$index)"
                            ng-show="voting.options.length > 2"></i>
                       </span>
 
