@@ -35,7 +35,7 @@ var VotingSchema = new Schema({
   },
   selectionType:{
     type: String,
-    enum :['single','multi'],//....should considering how design multi select when select it
+    enum :['single','multi'], //....should considering how design multi select when select it
     default : 'single',
     required: true
   },

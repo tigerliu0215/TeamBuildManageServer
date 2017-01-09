@@ -58,19 +58,41 @@
                 <div class="col-md-12">
                   <div class="form-group" show-errors>
                     <label class="control-label" for="votingTitle{{$index}}">Title</label>
-                    <input name="votingTitle{{$index}}" type="text" ng-model="voting.title" id="votingTitle{{$index}}" class="form-control"
+                    <input name="votingTitle{{$index}}" type="text" ng-model="voting.title" id="votingTitle{{$index}}"
+                           class="form-control"
                            placeholder="Title" required>
                   </div>
                 </div>
-                <p ng-repeat="votingOption in voting.options">
-                  {{votingOption.sequence}}:{{votingOption.description}}
-                </p>
+                <div class="col-md-12">
+                  <div class="form-group" show-errors
+                       ng-repeat="votingOption in voting.options track by votingOption.sequence">
+                    <label class="control-label" for="votingOption{{votingOption.sequence}}">Option
+                      #{{votingOption.sequence}}</label>
+                    <div class="input-group">
+                      <input name="votingOption{{votingOption.sequence}}" type="text"
+                             ng-model="votingOption.description" id="votingOption{{votingOption.sequence}}"
+                             class="form-control"
+                             placeholder="Option Description" required>
+                      <span class="input-group-addon ">
+                        <i class="glyphicon-trash glyphicon" ng-click="vm.delVotingOption(voting,votingOption.sequence)"
+                           ng-show="voting.options.length > 2"></i>
+                      </span>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <button type="button" class="btn-sm btn-warning" ng-click="vm.addVotingOption($index)">Add Option
+                  </button>
+                </div>
 
                 <p><strong>Selection Type:</strong></p>
                 <div class="btn-group">
-                  <label class="btn btn-success" ng-model="voting.selectionType" uib-btn-radio="'single'" >Single</label>
-                  <label class="btn btn-success" ng-model="voting.selectionType" uib-btn-radio="'multi'" >Multi</label>
+                  <label class="btn btn-success" ng-model="voting.selectionType" uib-btn-radio="'single'">Single</label>
+                  <label class="btn btn-success" ng-model="voting.selectionType" uib-btn-radio="'multi'">Multi</label>
                 </div>
+
               </li>
             </ul>
           </div>
@@ -78,7 +100,9 @@
 
         <div class="form-group">
           <button type="button" class="btn btn-default btn-warning" ng-click="vm.addVoting()">Add Voting</button>
-          <button type="submit" class="btn btn-default btn-primary pull-right">{{vm.activity._id ? 'Update' : 'Create'}}</button>
+          <button type="submit" class="btn btn-default btn-primary pull-right">{{vm.activity._id ? 'Update' :
+            'Create'}}
+          </button>
         </div>
 
       </fieldset>

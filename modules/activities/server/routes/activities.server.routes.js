@@ -18,6 +18,9 @@ module.exports = function (app) {
   app.route('/api/attachments/upload').all(activitiesPolicy.isAllowed)
     .post(attachments.uploadAttachment);
 
+  app.route('/api/popular-images')
+    .get(attachments.getPopularImages);
+
   app.route('/api/activities/comments/publish/:activityId').all(activitiesPolicy.isAllowed)
     .post(activities.publishComment);
 

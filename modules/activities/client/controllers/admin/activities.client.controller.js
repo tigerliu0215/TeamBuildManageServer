@@ -134,14 +134,31 @@
       vm.activity.votings.splice(selectVotingIndex,1);
     }
 
-    function addVotingOption(voting){
-
+    function addVotingOption(votingIndex){
+      resetVotingSequence(votingIndex);
+      var optionsCount = vm.activity.votings[votingIndex].options.length;
+      vm.activity.votings[votingIndex].options.push({
+        sequence:optionsCount+1,
+        description:'Option'+(optionsCount+1),
+        voteDetails:[]
+      });
     }
 
-    function delVotingOption(voting,$index){
+    function delVotingOption(voting,votingOptionIndex){
+      var votingIndex = vm.activity.votings.indexOf(voting);
 
+      $log.info('del votingIndex:'+votingIndex+",votingOptionIndex:"+votingOptionIndex);
+      vm.activity.votings[votingIndex].options.splice(votingOptionIndex,1);
+      resetVotingSequence(votingIndex);
     }
 
+    function resetVotingSequence(votingIndex){
+      var i = 0;
+      _.each(vm.activity.votings[votingIndex].options,function(votingOption){
+        votingOption.sequence = (i+1);
+        i++;
+      })
+    }
 
 
   }
