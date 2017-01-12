@@ -76,6 +76,9 @@ function getPopularImages(req, res) {
         var attachments = [];
         _.each(activities,function(activity){
           if(!_.isUndefined(activity.attachments)){
+            _.each(activity.attachments,function(attachment){
+              attachment.activityId = activity._id;
+            });
             attachments = attachments.concat(activity.attachments);
           }
         });
