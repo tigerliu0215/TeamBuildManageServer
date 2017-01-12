@@ -29,6 +29,12 @@ var ActivitySchema = new Schema({
   comments: {
     type: [CommentSchema]
   },
+  likes:{
+    type:[String] //use userId
+  },
+  collects: {
+    type: [String] //use userId
+  },
   created: {
     type: Date,
     default: Date.now

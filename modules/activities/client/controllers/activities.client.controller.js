@@ -22,6 +22,8 @@
     };
     vm.commentsService = CommentsService;
     vm.publishComment = publishComment;
+    vm.toggleLike = toggleLike;
+    vm.toggleCollect = toggleCollect;
 
 
     function publishComment(isValid){
@@ -39,5 +41,20 @@
         });
       });
     }
+
+    function toggleLike(){
+      var activityId = vm.activity._id;
+      vm.commentsService.toggleLike(activityId,function(updatedActivity){
+        vm.activity = updatedActivity;
+      })
+    }
+
+    function toggleCollect(){
+      var activityId = vm.activity._id;
+      vm.commentsService.toggleCollect(activityId,function(updatedActivity){
+        vm.activity = updatedActivity;
+      })
+    }
+
   }
 })();

@@ -24,5 +24,11 @@ module.exports = function (app) {
   app.route('/api/activities/comments/publish/:activityId').all(activitiesPolicy.isAllowed)
     .post(activities.publishComment);
 
+  app.route('/api/activities/action/like/:activityId').all(activitiesPolicy.isAllowed)
+    .get(activities.toggleLike);
+
+  app.route('/api/activities/action/collect/:activityId').all(activitiesPolicy.isAllowed)
+    .get(activities.toggleCollect);
+
   app.param('activityId',activities.findById);
 };

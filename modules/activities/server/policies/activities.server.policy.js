@@ -42,6 +42,18 @@ function invokeRolesPolicies() {
         {
           resources: '/api/activities/comments/publish/:activityId',
           permissions: ['post']
+        },
+        {
+          resources: '/api/activities/action/collect/:activityId',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/action/like/:activityId',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/action/vote/:activityId',
+          permissions: ['post']//should contains actId,votSequence,optionSequence
         }
       ]
     },

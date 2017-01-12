@@ -16,6 +16,9 @@ module.exports.update = update;
 module.exports.delete = del;
 
 module.exports.publishComment = publishComment;
+module.exports.toggleLike = toggleLike;
+module.exports.toggleCollect = toggleCollect;
+
 
 function listActivities(req, res) {
   Activity
@@ -88,7 +91,6 @@ function update(req, res) {
   activity = _.assign(activity, activityUpdateContent);
 
 
-  var user = req.user;
   activity.updated = Date.now();
   activity.updatedBy = req.user;
 
@@ -156,5 +158,76 @@ function publishComment(req, res) {
       createdBy: newComment.user.displayName
     });
     return act;
+  }
+}
+
+
+function toggleLike(req,res){
+  var activity = req.activity;
+  var user = req.user;
+  var username = user.username;
+
+  activity = calToggleLike(username,activity);
+
+  activity.save(function (error) {
+    if (error) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(error)
+      });
+    }
+    else {
+      res.json(activity);
+    }
+  });
+
+  function calToggleLike(username,activity){
+    if(_.isUndefined(activity.likes)){
+      activity.likes = [];
+    }
+
+    if(_.indexOf(activity.likes,username) == -1){
+      activity.likes.push(username);
+    }
+    else{
+      var userIndex = _.indexOf(activity.likes,username);
+      activity.likes.splice(userIndex,1);
+    }
+
+    return activity;
+  }
+}
+
+function toggleCollect(req,res){
+  var activity = req.activity;
+  var user = req.user;
+  var username = user.username;
+
+  activity = calToggleCollect(username,activity);
+
+  activity.save(function (error) {
+    if (error) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(error)
+      });
+    }
+    else {
+      res.json(activity);
+    }
+  });
+
+  function calToggleCollect(username,activity){
+    if(_.isUndefined(activity.collects)){
+      activity.collects = [];
+    }
+
+    if(_.indexOf(activity.collects,username) == -1){
+      activity.collects.push(username);
+    }
+    else{
+      var userIndex = _.indexOf(activity.collects,username);
+      activity.collects.splice(userIndex,1);
+    }
+
+    return activity;
   }
 }

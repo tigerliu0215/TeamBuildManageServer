@@ -10,6 +10,7 @@
   function routeFilter($rootScope, $state, Authentication) {
     $rootScope.$on('$stateChangeStart', stateChangeStart);
     $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
+    $rootScope.$on('$hideHeader',null);
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
       // Check authentication before changing state

@@ -24,6 +24,18 @@
           pageTitle:'Activities'
         }
       })
+      .state('activities.mobile',{
+        url:'/:activityId/mobile',
+        templateUrl:'/modules/activities/client/views/view-activity.mobile.client.view.html',
+        controller:'ActivitiesMobileViewController',
+        controllerAs:'vm',
+        resolve:{
+          activitiesService : getActivity
+        },
+        data:{
+          pageTitle:'Activity : {{activitiesService.title}}'
+        }
+      })
       .state('activities.view',{
         url:'/:activityId',
         templateUrl:'/modules/activities/client/views/view-activity.client.view.html',
