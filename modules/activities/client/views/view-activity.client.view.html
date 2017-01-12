@@ -39,7 +39,7 @@
 
 
 
-  <div class="col-md-12">
+  <div class="col-md-12"  ng-if="vm.authentication.user">
     <!-- For ng-repeat -->
     <!-- ui layout might copy weibo.com voting  -->
     <div class="panel panel-default" ng-repeat="voting in vm.activity.votings track by $index" >
