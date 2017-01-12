@@ -8,9 +8,9 @@
     .module('activities')
     .controller('ActivitiesViewController', ActivitiesViewController);
 
-  ActivitiesViewController.$inject = ['$scope', '$state', '$log', '$window', 'activitiesService', 'Authentication', 'Notification','CommentsService' ];
+  ActivitiesViewController.$inject = ['$scope', '$state', '$log', '$window', 'activitiesService', 'Authentication', 'Notification','ActivitiesActionService' ];
 
-  function ActivitiesViewController($scope, $state, $log, $window, activity, Authentication, Notification,CommentsService) {
+  function ActivitiesViewController($scope, $state, $log, $window, activity, Authentication, Notification,ActivitiesActionService) {
     var vm = this;
 
     vm.activity = activity;
@@ -20,11 +20,12 @@
       activityId:vm.activity._id,
       content:''
     };
-    vm.commentsService = CommentsService;
+    vm.activitiesActionService = ActivitiesActionService;
     vm.publishComment = publishComment;
     vm.toggleLike = toggleLike;
     vm.toggleCollect = toggleCollect;
-
+    vm.toggleVotingSelection = toggleVotingSelection;
+    vm.doVote = doVote;
 
     function publishComment(isValid){
       if (!isValid) {
@@ -32,7 +33,7 @@
         return false;
       }
 
-      vm.commentsService.publishComment(vm.comment,function(updatedActivity){
+      vm.activitiesActionService.publishComment(vm.comment,function(updatedActivity){
         vm.activity = updatedActivity;
         vm.comment.content = '';
 
@@ -44,17 +45,42 @@
 
     function toggleLike(){
       var activityId = vm.activity._id;
-      vm.commentsService.toggleLike(activityId,function(updatedActivity){
+      vm.activitiesActionService.toggleLike(activityId,function(updatedActivity){
         vm.activity = updatedActivity;
       })
     }
 
     function toggleCollect(){
       var activityId = vm.activity._id;
-      vm.commentsService.toggleCollect(activityId,function(updatedActivity){
+      vm.activitiesActionService.toggleCollect(activityId,function(updatedActivity){
         vm.activity = updatedActivity;
       })
     }
 
+    function toggleVotingSelection(selection,sequence){
+      $log.info('toggle votingSelection:',selection);
+      $log.info('sequence:',sequence);
+      if(!_.isArray(selection)){
+        selection = [];
+      }
+      var idx = selection.indexOf(sequence);
+
+      if (idx > -1) {
+        selection.splice(idx, 1);
+      }
+      else {
+        selection.push(sequence);
+      }
+      $log.info('after toggle selection:',selection);
+    }
+
+    function doVote(votingIndex,selection){
+      $log.info('do voting for:',votingIndex);
+      $log.info(selection);
+      var activityId = vm.activity._id;
+      vm.activitiesActionService.doVote(activityId,votingIndex,selection,function(updatedActivity){
+        vm.activity = updatedActivity;
+      });
+    }
   }
 })();

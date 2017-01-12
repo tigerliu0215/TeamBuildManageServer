@@ -5,19 +5,20 @@
 
   angular
     .module('activities.services')
-    .factory('CommentsService', CommentsService);
+    .factory('ActivitiesActionService', ActivitiesActionService);
 
 
-  CommentsService.$inject = ['$http', '$log'];
+  ActivitiesActionService.$inject = ['$http', '$log'];
 
 
-  function CommentsService($http, $log) {
+  function ActivitiesActionService($http, $log) {
     $log.info('comment service is running');
 
     var svc = this;
     svc.publishComment = publishComment;
     svc.toggleLike = toggleLike;
     svc.toggleCollect = toggleCollect;
+    svc.doVote = doVote;
 
     function publishComment(comment, callback) {
       var publishCommentApiUrl = '/api/activities/comments/publish/'+comment.activityId;
@@ -61,6 +62,25 @@
       }).then(
         function successCallback(response) {
           $log.info('toggle collect response:',response.data);
+          callback(response.data);
+        },
+        function errorCallback(response){
+
+        }
+      );
+    }
+
+    function doVote(activityId,votingIndex,votingSelection,callback){
+      var doVoteApiUrl = '/api/activities/action/vote/'+activityId+'/'+votingIndex;
+      $http({
+        url:doVoteApiUrl,
+        method:'POST',
+        data:{
+          selection:votingSelection
+        }
+      }).then(
+        function successCallback(response) {
+          $log.info('do voting response:',response.data);
           callback(response.data);
         },
         function errorCallback(response){

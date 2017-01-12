@@ -18,7 +18,7 @@ module.exports.delete = del;
 module.exports.publishComment = publishComment;
 module.exports.toggleLike = toggleLike;
 module.exports.toggleCollect = toggleCollect;
-
+module.exports.doVoting = doVoting;
 
 function listActivities(req, res) {
   Activity
@@ -35,6 +35,40 @@ function listActivities(req, res) {
         res.json(activities);
       }
     });
+}
+
+function wrapActivityWithUserData(activity,user){
+  if(_.isUndefined(user)){
+    return activity;
+  }
+  else{
+    var username = user.username;
+    if(!_.isUndefined(activity.likes)){
+      activity.isLiked = activity.likes.indexOf(username) > -1;
+    }
+    else{
+      activity.isLiked = false;
+    }
+
+    if(!_.isUndefined(activity.collects)){
+      activity.isCollected = activity.collects.indexOf(username) > -1;
+    }
+    else{
+      activity.isCollected = false;
+    }
+
+    if(!_.isUndefined(activity.votings)){
+      _.each(activity.votings,function(voting){
+        _.each(voting.options,function(option){
+          if(!_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+            voting.isVoted = true;
+          }
+        });
+      });
+    }
+
+    return activity;
+  }
 }
 
 function findById(req, res, next, activityId) {
@@ -82,7 +116,7 @@ function create(req, res) {
 function read(req, res) {
   var activity = req.activity ? req.activity.toJSON() : {};
 
-  res.json(activity);
+  res.json(wrapActivityWithUserData(activity,req.user));
 }
 
 function update(req, res) {
@@ -101,7 +135,7 @@ function update(req, res) {
       });
     }
     else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 }
@@ -138,7 +172,7 @@ function publishComment(req, res) {
       });
     }
     else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 
@@ -176,7 +210,7 @@ function toggleLike(req,res){
       });
     }
     else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 
@@ -211,7 +245,7 @@ function toggleCollect(req,res){
       });
     }
     else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 
@@ -228,6 +262,68 @@ function toggleCollect(req,res){
       activity.collects.splice(userIndex,1);
     }
 
+    return activity;
+  }
+}
+
+
+function doVoting(req,res){
+  var activity = req.activity;
+  var user = req.user;
+  //noinspection JSUnresolvedVariable
+  var votingIndex = req.params.votingIndex;
+  var votingSelection = req.body.selection;
+
+  activity = calDoVote(user,activity,votingIndex,votingSelection);
+  /*
+  console.log('currentVoting in activity:');
+  console.log(activity.votings[votingIndex]);
+  _.each(activity.votings[votingIndex].options,function(option){
+    console.log(option.voteDetails);
+  });
+  */
+  activity.markModified('votings');
+  activity.save(function (error) {
+    if (error) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(error)
+      });
+    }
+    else {
+      res.json(wrapActivityWithUserData(activity,req.user));
+    }
+  });
+
+  function calDoVote(user,activity,votingIndex,votingSelection){
+    var voting = activity.votings[votingIndex];
+
+    if(_.isEqual(voting.selectionType,'single')){
+      _.each(voting.options,function(option){
+        if(option.sequence == votingSelection){
+          //console.log('_.result(_.find(option.voteDetails,{\'createdBy\':user.username},\'createdBy\'):',_.result(_.find(option.voteDetails,{'createdBy':user.username},'createdBy')));
+          if(_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+            option.voteDetails.push({
+              createdBy:user.username,
+              created:new Date()
+            });
+          }
+        }
+      });
+    }
+    else{
+      _.each(voting.options,function(option){
+        if(votingSelection.indexOf(option.sequence)>-1){
+          if(_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+            option.voteDetails.push({
+              createdBy:user.username,
+              created:new Date()
+            });
+          }
+        }
+      });
+    }
+
+    activity.votings[votingIndex] = voting;
     return activity;
   }
 }

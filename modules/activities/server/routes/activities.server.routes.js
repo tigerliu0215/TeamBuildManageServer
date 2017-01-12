@@ -30,5 +30,8 @@ module.exports = function (app) {
   app.route('/api/activities/action/collect/:activityId').all(activitiesPolicy.isAllowed)
     .get(activities.toggleCollect);
 
+  app.route('/api/activities/action/vote/:activityId/:votingIndex').all(activitiesPolicy.isAllowed)
+    .post(activities.doVoting);
+
   app.param('activityId',activities.findById);
 };

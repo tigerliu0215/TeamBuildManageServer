@@ -11,27 +11,8 @@
   </div>
 
   <div class="col-md-12">
-    <div ng-bind-html="vm.activity.htmlContent" >
+    <div ng-bind-html="vm.activity.htmlContent">
 
-    </div>
-  </div>
-
-  <div class="col-md-12">
-    <!-- For ng-repeat -->
-    <!-- ui layout might copy weibo.com voting  -->
-    <div class="panel panel-default" ng-repeat="voting in vm.activity.votings track by $index">
-      <div class="panel-heading">
-        <span class="panel-title pull-left">Votings #{{$index+1}}</span>
-        <div class="clearfix"></div>
-      </div>
-      <!-- Existing Votings-->
-      <ul class="list-group">
-        <li class="list-group-item">
-          <div class="col-md-12">
-
-          </div>
-        </li>
-      </ul>
     </div>
   </div>
 
@@ -50,13 +31,67 @@
       <i class="glyphicon glyphicon-star-empty"></i>
       <span>{{vm.activity.collects.length}}</span>
     </button>
+
+    <div>
+      <p></p>
+    </div>
+  </div>
+
+
+
+  <div class="col-md-12">
+    <!-- For ng-repeat -->
+    <!-- ui layout might copy weibo.com voting  -->
+    <div class="panel panel-default" ng-repeat="voting in vm.activity.votings track by $index" >
+      <div class="panel-heading">
+        <span class="panel-title pull-left">Votings #{{$index+1}}</span>
+        <div class="clearfix"></div>
+      </div>
+      <div
+        ng-show="voting.isVoted"
+        class="panel-body"
+      >
+        <h6 class="panel-title"><strong>{{voting.title}}</strong></h6>
+        <p>
+          {{voting.description}}
+        </p>
+        <!-- Update here as graph -->
+        <div ng-repeat="votingOption in voting.options track by votingOption.sequence">
+          <span>{{votingOption.sequence}} : {{votingOption.description}} : {{votingOption.voteDetails.length}}</span>
+        </div>
+      </div>
+      <div
+        ng-hide="voting.isVoted"
+        class="panel-body" ng-init="voting.selected = (voting.selectionType == 'multi')?[]:''">
+        <h6 class="panel-title"><strong>{{voting.title}}</strong></h6>
+        <p>
+          {{voting.description}}
+        </p>
+        <!-- Existing Votings-->
+        <div ng-repeat="votingOption in voting.options track by votingOption.sequence">
+          <label ng-if="voting.selectionType == 'single'">
+            <input type="radio" ng-model="voting.selected" value="{{votingOption.sequence}}">
+            <span>{{votingOption.sequence}} : {{votingOption.description}}</span>
+          </label><br/>
+          <label ng-if="voting.selectionType == 'multi'">
+            <input type="checkbox"
+                   ng-click="vm.toggleVotingSelection(voting.selected,votingOption.sequence)"
+                   ng-checked="voting.selected.indexOf(votingOption.sequence) > -1"
+                   value="{{votingOption.sequence}}">
+            <span>{{votingOption.sequence}} : {{votingOption.description}}</span>
+          </label><br/>
+        </div>
+        <button class="btn btn-primary pull-right" ng-click="vm.doVote($index,voting.selected)">Vote!</button>
+      </div>
+
+    </div>
   </div>
 
 
   <!-- Comments Area -->
-  <div class="col-md-12" ng-if="vm.authentication.user" >
+  <div class="col-md-12" ng-if="vm.authentication.user">
     <div class="panel panel-default">
-      <div class="panel-heading" >Comments</div>
+      <div class="panel-heading">Comments</div>
       <!-- Existing Comments-->
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="comment in vm.activity.comments">
@@ -73,10 +108,12 @@
 
       <!-- Input -->
       <div class="panel-body" ng-if="vm.authentication.user">
-        <form name="vm.form.commentForm" ng-submit="vm.publishComment(vm.form.commentForm.$valid)" novalidate autocomplete="off">
+        <form name="vm.form.commentForm" ng-submit="vm.publishComment(vm.form.commentForm.$valid)" novalidate
+              autocomplete="off">
           <div class="form-group" show-errors="">
             <label class="control-label" for="content">Your Comment</label>
-            <textarea name="content" data-ng-model="vm.comment.content" id="content" class="form-control" cols="30" rows="3" placeholder="Input Here" required></textarea>
+            <textarea name="content" data-ng-model="vm.comment.content" id="content" class="form-control" cols="30"
+                      rows="3" placeholder="Input Here" required></textarea>
             <div ng-messages="vm.form.commentForm.content.$error" role="alert">
               <p class="help-block error-text" ng-message="required">Content can not be empty.</p>
             </div>

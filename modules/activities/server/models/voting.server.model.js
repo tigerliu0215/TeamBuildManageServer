@@ -33,6 +33,10 @@ var VotingSchema = new Schema({
     trim: true,
     required: 'Title cannot be blank'
   },
+  description:{
+    type: String,
+    default:''
+  },
   selectionType:{
     type: String,
     enum :['single','multi'], //....should considering how design multi select when select it
