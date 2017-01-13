@@ -29,8 +29,8 @@
         data:comment
       }).then(
         function successCallback(response) {
-          $log.info('publish comment response:',response.data);
-          callback(response.data);
+          $log.info('publish comment response:',response.data.data);
+          callback(response.data.data);
         },
         function errorCallback(response){
 
@@ -45,8 +45,8 @@
         method:'GET'
       }).then(
         function successCallback(response) {
-          $log.info('toggle like response:',response.data);
-          callback(response.data);
+          $log.info('toggle like response:',response.data.data);
+          callback(response.data.data);
         },
         function errorCallback(response){
 
@@ -61,8 +61,8 @@
         method:'GET'
       }).then(
         function successCallback(response) {
-          $log.info('toggle collect response:',response.data);
-          callback(response.data);
+          $log.info('toggle collect response:',response.data.data);
+          callback(response.data.data);
         },
         function errorCallback(response){
 
@@ -80,8 +80,8 @@
         }
       }).then(
         function successCallback(response) {
-          $log.info('do voting response:',response.data);
-          callback(response.data);
+          $log.info('do voting response:',response.data.data);
+          callback(response.data.data);
         },
         function errorCallback(response){
 

@@ -15,6 +15,19 @@
         activityId: '@_id'
       },
       {
+        query:{
+          isArray:true,
+          method: 'GET',
+          params: {},
+          transformResponse:function(response){
+            return angular.fromJson(response).data;
+          }
+        },
+        get:{
+          transformResponse:function(response){
+            return angular.fromJson(response).data;
+          }
+        },
         update:{
           method:'PUT'
         }

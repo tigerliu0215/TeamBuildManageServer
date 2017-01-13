@@ -32,14 +32,21 @@ function listActivities(req, res) {
           message: errorHandler.getErrorMessage(error)
         });
       } else {
-        res.json(activities);
+        res.json(wrapActivities(activities));
       }
     });
+}
+function wrapActivities(activities){
+  return {
+    data:activities
+  }
 }
 
 function wrapActivityWithUserData(activity,user){
   if(_.isUndefined(user)){
-    return activity;
+    return {
+      data:activity
+    };
   }
   else{
     var username = user.username;
@@ -67,7 +74,9 @@ function wrapActivityWithUserData(activity,user){
       });
     }
 
-    return activity;
+    return {
+      data:activity
+    };
   }
 }
 
@@ -108,7 +117,7 @@ function create(req, res) {
       });
     }
     else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 }
@@ -149,7 +158,7 @@ function del(req, res) {
         message: errorHandler.getErrorMessage(error)
       });
     } else {
-      res.json(activity);
+      res.json(wrapActivityWithUserData(activity,req.user));
     }
   });
 }
