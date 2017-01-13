@@ -24,6 +24,9 @@ module.exports = function (app) {
   app.route('/api/activities/comments/publish/:activityId').all(activitiesPolicy.isAllowed)
     .post(activities.publishComment);
 
+  app.route('/api/activities/votings/create').all(activitiesPolicy.isAllowed)
+    .post(activities.createVoting);
+
   app.route('/api/activities/action/like/:activityId').all(activitiesPolicy.isAllowed)
     .get(activities.toggleLike);
 
@@ -32,6 +35,7 @@ module.exports = function (app) {
 
   app.route('/api/activities/action/vote/:activityId/:votingIndex').all(activitiesPolicy.isAllowed)
     .post(activities.doVoting);
+
 
   app.route('/api/activities/query/collection').all(activitiesPolicy.isAllowed)
     .get(activities.getCollection);

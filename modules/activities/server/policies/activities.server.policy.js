@@ -25,6 +25,10 @@ function invokeRolesPolicies() {
         {
           resources: '/api/attachments/upload',
           permissions: ['*']
+        },
+        {
+          resources: '/api/activities/votings/create',
+          permissions: ['post']
         }
       ]
     },

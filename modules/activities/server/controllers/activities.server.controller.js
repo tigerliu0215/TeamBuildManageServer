@@ -16,6 +16,7 @@ module.exports.read = read;
 module.exports.update = update;
 module.exports.delete = del;
 
+module.exports.createVoting = createVoting;
 module.exports.publishComment = publishComment;
 module.exports.toggleLike = toggleLike;
 module.exports.toggleCollect = toggleCollect;
@@ -130,6 +131,31 @@ function create(req, res) {
   var activity = new Activity(req.body);
   activity.createdBy = req.user;
   activity.updated = Date.now();
+  activity.updatedBy = req.user;
+
+  activity.save(function (error,updatedActivity) {
+    if (error) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(error)
+      });
+    }
+    else {
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
+    }
+  });
+}
+
+function createVoting(req,res){
+  var newVoting = req.body;
+  var activity = new Activity({
+    title:'[Voting]',
+    htmlContent:'',
+    attachments:[],
+    comments:[],
+    votings:[newVoting]
+  });
+  activity.createdBy = req.user;
+  activity.updated = new Date();
   activity.updatedBy = req.user;
 
   activity.save(function (error,updatedActivity) {
