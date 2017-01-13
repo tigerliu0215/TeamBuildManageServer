@@ -38,11 +38,10 @@
   </div>
 
 
-
-  <div class="col-md-12"  ng-if="vm.authentication.user">
+  <div class="col-md-12" ng-if="vm.authentication.user">
     <!-- For ng-repeat -->
     <!-- ui layout might copy weibo.com voting  -->
-    <div class="panel panel-default" ng-repeat="voting in vm.activity.votings track by $index" >
+    <div class="panel panel-default" ng-repeat="voting in vm.activity.votings track by $index">
       <div class="panel-heading">
         <span class="panel-title pull-left">Votings #{{$index+1}}</span>
         <div class="clearfix"></div>
@@ -59,6 +58,10 @@
         <div ng-repeat="votingOption in voting.options track by votingOption.sequence">
           <span>{{votingOption.sequence}} : {{votingOption.description}} : {{votingOption.voteDetails.length}}</span>
         </div>
+
+        <!-- Pie chart -->
+        <nvd3 options="vm.votingChartOptions" data="voting.options"></nvd3>
+
       </div>
       <div
         ng-hide="voting.isVoted"
@@ -123,4 +126,6 @@
       </div>
     </div>
   </div>
+
+
 </section>

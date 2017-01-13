@@ -10,7 +10,8 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
         'public/lib/bootswatch-dist/css/bootstrap.css',
         'public/lib/font-awesome/css/font-awesome.css',
-        'public/lib/textAngular/dist/textAngular.css'
+        'public/lib/textAngular/dist/textAngular.css',
+        'public/lib/nvd3/build/nv.d3.css'
         // endbower
       ],
       js: [
@@ -30,7 +31,10 @@ module.exports = {
         'public/lib/textAngular/dist/textAngular-rangy.min.js',
         'public/lib/textAngular/dist/textAngular-sanitize.js',
         'public/lib/textAngular/dist/textAngularSetup.js',
-        'public/lib/textAngular/dist/textAngular.js'
+        'public/lib/textAngular/dist/textAngular.js',
+        'public/lib/d3/d3.js',
+        'public/lib/nvd3/build/nv.d3.js',
+        'public/lib/angular-nvd3/dist/angular-nvd3.js'
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

@@ -21,6 +21,35 @@
       content:''
     };
     vm.activitiesActionService = ActivitiesActionService;
+
+    //for voting chart
+    vm.votingChartOptions = {
+      chart: {
+        type: 'pieChart',
+        height: 200,
+        x: function(votingOption){
+          return votingOption.description;
+        },
+        y: function(votingOption){
+          return votingOption.voteDetails.length;
+        },
+        showLabels: false,
+        duration: 500,
+        labelThreshold: 0.01,
+        labelSunbeamLayout: true,
+        legend: {
+          margin: {
+            top: 5,
+            right: 35,
+            bottom: 5,
+            left: 0
+          }
+        }
+      }
+    };
+
+
+
     vm.publishComment = publishComment;
     vm.toggleLike = toggleLike;
     vm.toggleCollect = toggleCollect;

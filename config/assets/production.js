@@ -10,7 +10,8 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.min.css',
         'public/lib/bootswatch-dist/css/bootstrap.min.css',
         'public/lib/font-awesome/css/font-awesome.min.css',
-        'public/lib/textAngular/dist/textAngular.css'
+        'public/lib/textAngular/dist/textAngular.css',
+        'public/lib/nvd3/build/nv.d3.min.css'
         // endbower
       ],
       js: [
@@ -30,7 +31,10 @@ module.exports = {
         'public/lib/textAngular/dist/textAngular-rangy.min.js',
         'public/lib/textAngular/dist/textAngular-sanitize.min.js',
         'public/lib/textAngular/dist/textAngularSetup.js',
-        'public/lib/textAngular/dist/textAngular.min.js'
+        'public/lib/textAngular/dist/textAngular.min.js',
+        'public/lib/d3/d3.min.js',
+        'public/lib/nvd3/build/nv.d3.min.js',
+        'public/lib/angular-nvd3/dist/angular-nvd3.min.js'
         // endbower
       ]
     },
