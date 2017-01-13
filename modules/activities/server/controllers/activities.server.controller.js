@@ -63,7 +63,6 @@ function wrapActivityWithUserData(activity, user) {
     else {
       clonedActivity.isLiked = false;
     }
-    // console.log('clonedActivity.isLiked is:',clonedActivity.isLiked);
 
     if (!_.isUndefined(clonedActivity.collects)) {
       clonedActivity.isCollected = clonedActivity.collects.indexOf(username) > -1;
@@ -71,7 +70,6 @@ function wrapActivityWithUserData(activity, user) {
     else {
       clonedActivity.isCollected = false;
     }
-    // console.log('clonedActivity.isCollected is:',clonedActivity.isCollected);
 
     if (!_.isUndefined(clonedActivity.votings)) {
       _.each(clonedActivity.votings, function (voting) {
@@ -83,8 +81,6 @@ function wrapActivityWithUserData(activity, user) {
       });
     }
 
-    console.log('clonedActivity');
-    console.log(clonedActivity);
 
     return {
       data: clonedActivity
@@ -122,14 +118,14 @@ function create(req, res) {
   activity.updated = Date.now();
   activity.updatedBy = req.user;
 
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 }
@@ -149,14 +145,14 @@ function update(req, res) {
   activity.updated = Date.now();
   activity.updatedBy = req.user;
 
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 }
@@ -186,14 +182,14 @@ function publishComment(req, res) {
   activity.updated = Date.now();
   activity.updatedBy = req.user;
 
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 
@@ -224,14 +220,14 @@ function toggleLike(req, res) {
 
   activity = calToggleLike(username, activity);
 
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 
@@ -259,14 +255,14 @@ function toggleCollect(req, res) {
 
   activity = calToggleCollect(username, activity);
 
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 
@@ -303,14 +299,14 @@ function doVoting(req, res) {
    });
    */
   activity.markModified('votings');
-  activity.save(function (error) {
+  activity.save(function (error,updatedActivity) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity, req.user));
+      res.json(wrapActivityWithUserData(updatedActivity._doc, req.user));
     }
   });
 
