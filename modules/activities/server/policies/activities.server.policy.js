@@ -54,6 +54,18 @@ function invokeRolesPolicies() {
         {
           resources: '/api/activities/action/vote/:activityId/:votingIndex',
           permissions: ['post']  //should contains actId,voteSequence,optionSequence
+        },
+        {
+          resources: '/api/activities/query/collection',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/query/likes',
+          permissions: ['get']
+        },
+        {
+          resources: '/api/activities/query/votings',
+          permissions: ['get']
         }
       ]
     },

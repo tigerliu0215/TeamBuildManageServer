@@ -33,5 +33,14 @@ module.exports = function (app) {
   app.route('/api/activities/action/vote/:activityId/:votingIndex').all(activitiesPolicy.isAllowed)
     .post(activities.doVoting);
 
+  app.route('/api/activities/query/collection').all(activitiesPolicy.isAllowed)
+    .get(activities.getCollection);
+
+  app.route('/api/activities/query/likes').all(activitiesPolicy.isAllowed)
+    .get(activities.getLikes);
+
+  app.route('/api/activities/query/votings').all(activitiesPolicy.isAllowed)
+    .get(activities.getVotings);
+
   app.param('activityId',activities.findById);
 };

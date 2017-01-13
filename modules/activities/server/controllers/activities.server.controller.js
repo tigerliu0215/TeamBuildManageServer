@@ -20,6 +20,11 @@ module.exports.toggleLike = toggleLike;
 module.exports.toggleCollect = toggleCollect;
 module.exports.doVoting = doVoting;
 
+//user level api,no ui now
+module.exports.getCollection = getCollection;
+module.exports.getLikes = getLikes;
+module.exports.getVotings = getVotingList;
+
 function listActivities(req, res) {
   Activity
     .find()
@@ -36,46 +41,53 @@ function listActivities(req, res) {
       }
     });
 }
-function wrapActivities(activities){
+function wrapActivities(activities) {
   return {
-    data:activities
+    data: activities
   }
 }
 
-function wrapActivityWithUserData(activity,user){
-  if(_.isUndefined(user)){
+function wrapActivityWithUserData(activity, user) {
+  if (_.isUndefined(user)) {
+    console.log('user is undefined,only return activity data.');
     return {
-      data:activity
+      data: activity
     };
   }
-  else{
+  else {
+    var clonedActivity = _.clone(activity);
     var username = user.username;
-    if(!_.isUndefined(activity.likes)){
-      activity.isLiked = activity.likes.indexOf(username) > -1;
+    if (!_.isUndefined(clonedActivity.likes)) {
+      clonedActivity.isLiked = clonedActivity.likes.indexOf(username) > -1;
     }
-    else{
-      activity.isLiked = false;
+    else {
+      clonedActivity.isLiked = false;
     }
+    // console.log('clonedActivity.isLiked is:',clonedActivity.isLiked);
 
-    if(!_.isUndefined(activity.collects)){
-      activity.isCollected = activity.collects.indexOf(username) > -1;
+    if (!_.isUndefined(clonedActivity.collects)) {
+      clonedActivity.isCollected = clonedActivity.collects.indexOf(username) > -1;
     }
-    else{
-      activity.isCollected = false;
+    else {
+      clonedActivity.isCollected = false;
     }
+    // console.log('clonedActivity.isCollected is:',clonedActivity.isCollected);
 
-    if(!_.isUndefined(activity.votings)){
-      _.each(activity.votings,function(voting){
-        _.each(voting.options,function(option){
-          if(!_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+    if (!_.isUndefined(clonedActivity.votings)) {
+      _.each(clonedActivity.votings, function (voting) {
+        _.each(voting.options, function (option) {
+          if (!_.isUndefined(_.result(_.find(option.voteDetails, {'createdBy': user.username}), 'createdBy'))) {
             voting.isVoted = true;
           }
         });
       });
     }
 
+    console.log('clonedActivity');
+    console.log(clonedActivity);
+
     return {
-      data:activity
+      data: clonedActivity
     };
   }
 }
@@ -117,7 +129,7 @@ function create(req, res) {
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 }
@@ -125,7 +137,7 @@ function create(req, res) {
 function read(req, res) {
   var activity = req.activity ? req.activity.toJSON() : {};
 
-  res.json(wrapActivityWithUserData(activity,req.user));
+  res.json(wrapActivityWithUserData(activity, req.user));
 }
 
 function update(req, res) {
@@ -144,7 +156,7 @@ function update(req, res) {
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 }
@@ -152,13 +164,13 @@ function update(req, res) {
 function del(req, res) {
   var activity = req.activity;
 
-  activity.remove(function(error){
+  activity.remove(function (error) {
     if (error) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(error)
       });
     } else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 }
@@ -181,7 +193,7 @@ function publishComment(req, res) {
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 
@@ -205,12 +217,12 @@ function publishComment(req, res) {
 }
 
 
-function toggleLike(req,res){
+function toggleLike(req, res) {
   var activity = req.activity;
   var user = req.user;
   var username = user.username;
 
-  activity = calToggleLike(username,activity);
+  activity = calToggleLike(username, activity);
 
   activity.save(function (error) {
     if (error) {
@@ -219,33 +231,33 @@ function toggleLike(req,res){
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 
-  function calToggleLike(username,activity){
-    if(_.isUndefined(activity.likes)){
+  function calToggleLike(username, activity) {
+    if (_.isUndefined(activity.likes)) {
       activity.likes = [];
     }
 
-    if(_.indexOf(activity.likes,username) == -1){
+    if (_.indexOf(activity.likes, username) == -1) {
       activity.likes.push(username);
     }
-    else{
-      var userIndex = _.indexOf(activity.likes,username);
-      activity.likes.splice(userIndex,1);
+    else {
+      var userIndex = _.indexOf(activity.likes, username);
+      activity.likes.splice(userIndex, 1);
     }
 
     return activity;
   }
 }
 
-function toggleCollect(req,res){
+function toggleCollect(req, res) {
   var activity = req.activity;
   var user = req.user;
   var username = user.username;
 
-  activity = calToggleCollect(username,activity);
+  activity = calToggleCollect(username, activity);
 
   activity.save(function (error) {
     if (error) {
@@ -254,43 +266,42 @@ function toggleCollect(req,res){
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 
-  function calToggleCollect(username,activity){
-    if(_.isUndefined(activity.collects)){
+  function calToggleCollect(username, activity) {
+    if (_.isUndefined(activity.collects)) {
       activity.collects = [];
     }
 
-    if(_.indexOf(activity.collects,username) == -1){
+    if (_.indexOf(activity.collects, username) == -1) {
       activity.collects.push(username);
     }
-    else{
-      var userIndex = _.indexOf(activity.collects,username);
-      activity.collects.splice(userIndex,1);
+    else {
+      var userIndex = _.indexOf(activity.collects, username);
+      activity.collects.splice(userIndex, 1);
     }
 
     return activity;
   }
 }
 
-
-function doVoting(req,res){
+function doVoting(req, res) {
   var activity = req.activity;
   var user = req.user;
   //noinspection JSUnresolvedVariable
   var votingIndex = req.params.votingIndex;
   var votingSelection = req.body.selection;
 
-  activity = calDoVote(user,activity,votingIndex,votingSelection);
+  activity = calDoVote(user, activity, votingIndex, votingSelection);
   /*
-  console.log('currentVoting in activity:');
-  console.log(activity.votings[votingIndex]);
-  _.each(activity.votings[votingIndex].options,function(option){
-    console.log(option.voteDetails);
-  });
-  */
+   console.log('currentVoting in activity:');
+   console.log(activity.votings[votingIndex]);
+   _.each(activity.votings[votingIndex].options,function(option){
+   console.log(option.voteDetails);
+   });
+   */
   activity.markModified('votings');
   activity.save(function (error) {
     if (error) {
@@ -299,33 +310,33 @@ function doVoting(req,res){
       });
     }
     else {
-      res.json(wrapActivityWithUserData(activity,req.user));
+      res.json(wrapActivityWithUserData(activity, req.user));
     }
   });
 
-  function calDoVote(user,activity,votingIndex,votingSelection){
+  function calDoVote(user, activity, votingIndex, votingSelection) {
     var voting = activity.votings[votingIndex];
 
-    if(_.isEqual(voting.selectionType,'single')){
-      _.each(voting.options,function(option){
-        if(option.sequence == votingSelection){
+    if (_.isEqual(voting.selectionType, 'single')) {
+      _.each(voting.options, function (option) {
+        if (option.sequence == votingSelection) {
           //console.log('_.result(_.find(option.voteDetails,{\'createdBy\':user.username},\'createdBy\'):',_.result(_.find(option.voteDetails,{'createdBy':user.username},'createdBy')));
-          if(_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+          if (_.isUndefined(_.result(_.find(option.voteDetails, {'createdBy': user.username}), 'createdBy'))) {
             option.voteDetails.push({
-              createdBy:user.username,
-              created:new Date()
+              createdBy: user.username,
+              created: new Date()
             });
           }
         }
       });
     }
-    else{
-      _.each(voting.options,function(option){
-        if(votingSelection.indexOf(option.sequence)>-1){
-          if(_.isUndefined(_.result(_.find(option.voteDetails,{'createdBy':user.username}),'createdBy'))){
+    else {
+      _.each(voting.options, function (option) {
+        if (votingSelection.indexOf(option.sequence) > -1) {
+          if (_.isUndefined(_.result(_.find(option.voteDetails, {'createdBy': user.username}), 'createdBy'))) {
             option.voteDetails.push({
-              createdBy:user.username,
-              created:new Date()
+              createdBy: user.username,
+              created: new Date()
             });
           }
         }
@@ -336,3 +347,68 @@ function doVoting(req,res){
     return activity;
   }
 }
+
+function getCollection(req, res) {
+  var user = req.user;
+  Activity
+    .find({
+      collects: {
+        $in: [user.username]
+      }
+    })
+    .sort('-created')
+    .populate('createdBy', 'displayName')
+    .populate('updatedBy', 'displayName')
+    .exec(function (error, activities) {
+      if (error) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(error)
+        });
+      } else {
+        res.json(wrapActivities(activities));
+      }
+    });
+}
+
+function getLikes(req, res) {
+  var user = req.user;
+  Activity
+    .find({
+      likes: {
+        $in: [user.username]
+      }
+    })
+    .sort('-created')
+    .populate('createdBy', 'displayName')
+    .populate('updatedBy', 'displayName')
+    .exec(function (error, activities) {
+      if (error) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(error)
+        });
+      } else {
+        res.json(wrapActivities(activities));
+      }
+    });
+}
+
+function getVotingList(req, res) {
+  var user = req.user;
+  Activity
+    .find({
+      "votings.options.voteDetails.createdBy": user.username
+    })
+    .sort('-created')
+    .populate('createdBy', 'displayName')
+    .populate('updatedBy', 'displayName')
+    .exec(function (error, activities) {
+      if (error) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(error)
+        });
+      } else {
+        res.json(wrapActivities(activities));
+      }
+    });
+}
+
