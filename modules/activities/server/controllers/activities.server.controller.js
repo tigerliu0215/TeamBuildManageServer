@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var path = require('path');
+var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Activity = mongoose.model('Activity');
@@ -42,8 +43,21 @@ function listActivities(req, res) {
     });
 }
 function wrapActivities(activities) {
+  var activitiesWithSummary = calSummary(activities);
+
   return {
-    data: activities
+    data: activitiesWithSummary
+  };
+
+  function calSummary(activityList){
+    var calculatedActivityList = [];
+    _.each(activityList,function(activity){
+      var calculatedActivity = activity._doc;
+      var summaryElement = cheerio.load(activity.htmlContent);
+      calculatedActivity.summary = summaryElement.text();
+      calculatedActivityList.push(calculatedActivity);
+    });
+    return calculatedActivityList;
   }
 }
 
