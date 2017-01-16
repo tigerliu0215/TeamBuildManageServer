@@ -109,12 +109,12 @@
         selectionType:'single',
         options:[
           {
-            sequence:0,
+            sequence:1,
             description:'Option1',
             voteDetails:[]
           },
           {
-            sequence:1,
+            sequence:2,
             description:'Option2',
             voteDetails:[]
           }
