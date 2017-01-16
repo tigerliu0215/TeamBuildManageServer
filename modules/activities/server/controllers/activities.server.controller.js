@@ -147,8 +147,15 @@ function create(req, res) {
 
 function createVoting(req,res){
   var newVoting = req.body;
+  //construct and init voting data
+  if(!_.isUndefined(newVoting.options)){
+    _.each(newVoting.options,function(option){
+      option.voteDetails = [];
+    });
+  }
+
   var activity = new Activity({
-    title:'[Voting]',
+    title:'[Voting]:'+newVoting.title,
     htmlContent:'',
     attachments:[],
     comments:[],

@@ -31,7 +31,12 @@
           return votingOption.description;
         },
         y: function(votingOption){
-          return votingOption.voteDetails.length;
+          if(!_.isUndefined(votingOption.voteDetails)){
+            return votingOption.voteDetails.length;
+          }
+          else{
+            return 0;
+          }
         },
         showLabels: false,
         duration: 500,
