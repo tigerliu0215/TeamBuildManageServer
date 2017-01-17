@@ -65,7 +65,7 @@ function getPopularImages(req, res) {
       $ne:[]
     }
   })
-    .sort('-created')
+    .sort('-created')//TODO:should update to sort by likes.length / collect.length
     .limit(limit)//TODO:should update to be configurable
     .exec(function(error,activities){
       if (error) {
